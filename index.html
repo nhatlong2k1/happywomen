@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Women's Day 20/10</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#12040f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Be+Vietnam+Pro:wght@300;400;500&display=swap&subset=vietnamese" rel="stylesheet">
+<style>
+  :root {
+    --bg-1: #12040f;
+    --bg-2: #2a0820;
+    --pink: #ff8fc7;
+    --rose: #ff4f8b;
+    --gold: #ffd59e;
+    --text: #fff3f8;
+    --muted: rgba(255, 230, 242, .72);
+    --glass: rgba(255, 255, 255, .08);
+    --glass-border: rgba(255, 190, 220, .28);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    background: radial-gradient(ellipse at 50% 40%, var(--bg-2) 0%, var(--bg-1) 70%);
+    color: var(--text);
+    font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  #scene { position: fixed; inset: 0; display: block; cursor: grab; }
+  #scene:active { cursor: grabbing; }
+
+  /* ---------- Intro ---------- */
+  #intro {
+    position: fixed; inset: 0; z-index: 20;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+    background: radial-gradient(ellipse at center, rgba(60, 10, 40, .92), rgba(10, 2, 8, .97));
+    transition: opacity 1.2s ease, visibility 1.2s;
+    text-align: center; padding: 0 16px;
+  }
+  #intro.hide { opacity: 0; visibility: hidden; }
+  #intro p { color: var(--muted); font-size: 15px; letter-spacing: .08em; }
+  #intro h2 { font-family: 'Dancing Script', cursive; font-size: clamp(34px, 7vw, 56px); color: var(--pink);
+    text-shadow: 0 0 24px rgba(255, 100, 170, .6); }
+  #openBtn {
+    position: relative; width: 120px; height: 120px; border: none; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ffb3d6, var(--rose) 60%, #b0175a);
+    box-shadow: 0 0 40px rgba(255, 79, 139, .7), 0 0 90px rgba(255, 79, 139, .35);
+    font-size: 52px; cursor: pointer; animation: beat 1.3s ease-in-out infinite;
+  }
+  #openBtn::after {
+    content: ''; position: absolute; inset: -14px; border-radius: 50%;
+    border: 2px solid rgba(255, 143, 199, .5); animation: ring 1.8s ease-out infinite;
+  }
+  @keyframes beat { 0%,100% { transform: scale(1); } 15% { transform: scale(1.12); } 30% { transform: scale(.98); } 45% { transform: scale(1.06); } }
+  @keyframes ring { from { transform: scale(.9); opacity: 1; } to { transform: scale(1.5); opacity: 0; } }
+
+  /* ---------- Overlay ---------- */
+  .overlay { position: fixed; z-index: 5; pointer-events: none; opacity: 0; transition: opacity 1.6s ease 0.6s; }
+  body.started .overlay { opacity: 1; }
+
+  #title { top: 4vh; left: 0; right: 0; text-align: center; padding: 0 16px; }
+  #title .date {
+    display: inline-block; font-size: 13px; letter-spacing: .5em; color: var(--gold);
+    padding: 6px 4px 6px 14px; border-top: 1px solid rgba(255, 213, 158, .4); border-bottom: 1px solid rgba(255, 213, 158, .4);
+    margin-bottom: 10px;
+  }
+  #title h1 {
+    font-family: 'Dancing Script', cursive; font-weight: 700;
+    font-size: clamp(40px, 8.5vw, 92px); line-height: 1.05;
+    background: linear-gradient(90deg, #ffd1e8, #ff6fae, #ffd59e, #ff6fae, #ffd1e8);
+    background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: shine 6s linear infinite;
+    filter: drop-shadow(0 0 18px rgba(255, 80, 150, .55));
+  }
+  #title .sub { margin-top: 6px; font-size: clamp(13px, 2.2vw, 17px); color: var(--muted); letter-spacing: .12em; }
+  @keyframes shine { to { background-position: 200% center; } }
+
+  #card {
+    left: 50%; bottom: 5vh; transform: translateX(-50%);
+    width: min(640px, calc(100% - 32px));
+    padding: 22px 26px 18px; border-radius: 22px;
+    background: var(--glass); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 10px 50px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .12);
+    pointer-events: auto;
+  }
+  #card .label { font-family: 'Dancing Script', cursive; font-size: 24px; color: var(--pink); margin-bottom: 6px; }
+  #wish { font-size: clamp(15px, 2.3vw, 18px); line-height: 1.7; font-weight: 300; min-height: 3.4em; }
+  #wish .caret { display: inline-block; width: 2px; height: 1.1em; background: var(--pink); vertical-align: -3px; margin-left: 2px; animation: blink .8s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  #card .foot { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+  #card .sign { font-family: 'Dancing Script', cursive; font-size: 20px; color: var(--gold); }
+  #dots { display: flex; gap: 8px; }
+  #dots button { width: 9px; height: 9px; border-radius: 50%; border: none; background: rgba(255, 255, 255, .3); cursor: pointer; transition: all .3s; }
+  #dots button.active { background: var(--pink); width: 24px; border-radius: 6px; }
+
+  #musicBtn {
+    right: 18px; top: 18px; width: 48px; height: 48px; border-radius: 50%;
+    border: 1px solid var(--glass-border); background: var(--glass);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    color: var(--text); font-size: 20px; cursor: pointer; pointer-events: auto;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #photoLayer { inset: 0; z-index: 4; overflow: hidden; --pw: 170px; }
+  .polaroid {
+    position: absolute; left: 0; top: 0; padding: 8px 8px 30px; border-radius: 3px;
+    background: #fff7fa; pointer-events: auto; cursor: zoom-in; will-change: transform;
+    box-shadow: 0 0 34px rgba(255, 79, 139, .55), 0 12px 28px rgba(0, 0, 0, .45);
+    transition: box-shadow .3s;
+  }
+  .polaroid:hover { box-shadow: 0 0 50px rgba(255, 120, 180, .9), 0 12px 28px rgba(0, 0, 0, .45); }
+  .polaroid::before {
+    content: '❤'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    color: #ff2a6d; font-size: 20px; text-shadow: 0 0 8px rgba(255, 42, 109, .8);
+  }
+  .polaroid img { display: block; max-width: var(--pw); max-height: var(--pw); border-radius: 1px; }
+  @media (max-width: 600px) { #photoLayer { --pw: 120px; } }
+
+  #lightbox {
+    position: fixed; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center;
+    background: rgba(12, 2, 9, .86); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; cursor: zoom-out; padding: 16px;
+  }
+  #lightbox.show { opacity: 1; visibility: visible; }
+  #lightbox img {
+    max-width: min(90vw, 900px); max-height: 78vh; border-radius: 4px;
+    border: 12px solid #fff7fa; border-bottom-width: 48px;
+    box-shadow: 0 0 60px rgba(255, 79, 139, .45), 0 20px 60px rgba(0, 0, 0, .5);
+    transform: scale(.85) rotate(-2deg); transition: transform .45s cubic-bezier(.2, .9, .3, 1.2);
+  }
+  #lightbox.show img { transform: scale(1) rotate(-1deg); }
+
+  #musicBtn.playing span { display: inline-block; animation: spin 4s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #hint { left: 0; right: 0; bottom: 1.2vh; text-align: center; font-size: 11px; color: rgba(255, 220, 235, .45); letter-spacing: .1em; }
+
+  .pop-heart { position: fixed; z-index: 6; pointer-events: none; font-size: 22px; animation: pop 1.4s ease-out forwards; }
+  @keyframes pop { from { transform: translate(-50%, -50%) scale(.4); opacity: 1; } to { transform: translate(calc(-50% + var(--dx)), calc(-50% - 120px)) scale(1.3); opacity: 0; } }
+
+  @media (max-width: 600px) {
+    #card { padding: 18px 18px 14px; bottom: 4vh; }
+    #title { top: 3vh; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="scene"></canvas>
+
+<div id="intro">
+  <p>Có một món quà nhỏ dành cho bạn…</p>
+  <button id="openBtn" aria-label="Mở quà">💝</button>
+  <h2>Chạm để xem</h2>
+</div>
+
+<div id="title" class="overlay">
+  <div class="date">20 · 10</div>
+  <h1>Happy Women's Day</h1>
+  <div class="sub">Chúc mừng ngày Phụ nữ Việt Nam</div>
+</div>
+
+<div id="card" class="overlay">
+  <div class="label">Gửi người phụ nữ tuyệt vời,</div>
+  <div id="wish"></div>
+  <div class="foot">
+    <div id="dots"></div>
+    <div class="sign">With love ♡</div>
+  </div>
+</div>
+
+<button id="musicBtn" class="overlay" aria-label="Bật/tắt nhạc"><span>♫</span></button>
+<div id="hint" class="overlay">Kéo để xoay · Cuộn để phóng to · Chạm để thả tim · Chạm ảnh để xem</div>
+
+<div id="photoLayer" class="overlay"></div>
+<div id="lightbox"><img alt="Ảnh kỷ niệm"></div>
+
+<!-- Đặt file nhạc tên "music.mp3" cạnh index.html để dùng bài hát riêng; nếu không có, trang sẽ tự chơi giai điệu hộp nhạc. -->
+<audio id="bgm" src="music.mp3" loop preload="auto"></audio>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+/* =========================================================
+   LỜI CHÚC
+   ========================================================= */
+const WISHES = [
+  'Chúc Ngà 20/10 thật vui vẻ, luôn xinh đẹp, rạng rỡ và gặp thật nhiều điều may mắn, đáng yêu trong cuộc sống nhé.',
+  'Chúc em luôn vui vẻ, bình an và mỗi ngày đều nở nụ cười nhé . Mong rằng những điều tốt đẹp đang đợi em ở phía trước..!'
+];
+
+/* =========================================================
+   THREE.JS SCENE
+   ========================================================= */
+const isMobile = window.innerWidth < 700;
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.outputEncoding = THREE.sRGBEncoding;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x1a0514, 0.018);
+
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
+camera.position.set(0, 9, isMobile ? 36 : 28);
+
+const controls = new THREE.OrbitControls(camera, canvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.6;
+controls.enablePan = false;
+controls.minDistance = 10;
+controls.maxDistance = 50;
+
+// Ánh sáng
+scene.add(new THREE.AmbientLight(0xffe0ee, 0.55));
+const keyLight = new THREE.DirectionalLight(0xffffff, 0.9);
+keyLight.position.set(5, 10, 8);
+scene.add(keyLight);
+const pinkLight = new THREE.PointLight(0xff4f8b, 2.2, 40);
+scene.add(pinkLight);
+const goldLight = new THREE.PointLight(0xffc27a, 1.2, 50);
+goldLight.position.set(-12, 6, -6);
+scene.add(goldLight);
+
+// Texture chấm sáng tròn
+function glowTexture() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 64;
+  const g = c.getContext('2d');
+  const grd = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  grd.addColorStop(0, 'rgba(255,255,255,1)');
+  grd.addColorStop(0.25, 'rgba(255,255,255,.8)');
+  grd.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = grd;
+  g.fillRect(0, 0, 64, 64);
+  return new THREE.CanvasTexture(c);
+}
+const dotTex = glowTexture();
+
+/* ---------- Trái tim lớn bằng hạt ở trung tâm ---------- */
+const HEART_POINTS = isMobile ? 2600 : 5000;
+const heartPos = new Float32Array(HEART_POINTS * 3);
+const heartCol = new Float32Array(HEART_POINTS * 3);
+const cA = new THREE.Color(0xff9ccc), cB = new THREE.Color(0xff2a6d), tmpC = new THREE.Color();
+for (let i = 0; i < HEART_POINTS; i++) {
+  const t = Math.random() * Math.PI * 2;
+  const edge = Math.random() < 0.6;
+  const s = edge ? 1 + (Math.random() - 0.5) * 0.06 : Math.sqrt(Math.random());
+  const x = 16 * Math.pow(Math.sin(t), 3);
+  const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+  const k = 0.36;
+  heartPos[i * 3] = x * s * k;
+  heartPos[i * 3 + 1] = y * s * k + 1;
+  heartPos[i * 3 + 2] = (Math.random() - 0.5) * 4 * (1 - s * 0.6);
+  tmpC.copy(cA).lerp(cB, edge ? 0.85 : Math.random() * 0.6);
+  heartCol[i * 3] = tmpC.r; heartCol[i * 3 + 1] = tmpC.g; heartCol[i * 3 + 2] = tmpC.b;
+}
+const heartGeo = new THREE.BufferGeometry();
+heartGeo.setAttribute('position', new THREE.BufferAttribute(heartPos, 3));
+heartGeo.setAttribute('color', new THREE.BufferAttribute(heartCol, 3));
+const bigHeart = new THREE.Points(heartGeo, new THREE.PointsMaterial({
+  size: 0.28, map: dotTex, vertexColors: true, transparent: true,
+  depthWrite: false, blending: THREE.AdditiveBlending
+}));
+scene.add(bigHeart);
+
+/* ---------- Bầu trời sao ---------- */
+const STARS = isMobile ? 900 : 1800;
+const starPos = new Float32Array(STARS * 3);
+for (let i = 0; i < STARS; i++) {
+  const r = 40 + Math.random() * 60;
+  const th = Math.random() * Math.PI * 2, ph = Math.acos(2 * Math.random() - 1);
+  starPos[i * 3] = r * Math.sin(ph) * Math.cos(th);
+  starPos[i * 3 + 1] = r * Math.cos(ph);
+  starPos[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th);
+}
+const starGeo = new THREE.BufferGeometry();
+starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({
+  size: 0.5, map: dotTex, color: 0xffd6ea, transparent: true, opacity: 0.8,
+  depthWrite: false, blending: THREE.AdditiveBlending, fog: false
+}));
+scene.add(stars);
+
+/* ---------- Dải ngân hà trái tim ---------- */
+function heartTexture() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 64;
+  const g = c.getContext('2d');
+  g.shadowColor = 'rgba(255,255,255,.9)';
+  g.shadowBlur = 10;
+  g.fillStyle = '#fff';
+  g.beginPath();
+  g.moveTo(32, 50);
+  g.bezierCurveTo(10, 36, 8, 22, 18, 16);
+  g.bezierCurveTo(25, 12, 31, 16, 32, 22);
+  g.bezierCurveTo(33, 16, 39, 12, 46, 16);
+  g.bezierCurveTo(56, 22, 54, 36, 32, 50);
+  g.fill();
+  return new THREE.CanvasTexture(c);
+}
+const heartTex = heartTexture();
+
+const galaxyUniforms = [];
+function galaxyMaterial(tex) {
+  const u = {
+    uTime: { value: 0 },
+    uTex: { value: tex },
+    uScale: { value: window.innerHeight * renderer.getPixelRatio() * 0.866 }
+  };
+  galaxyUniforms.push(u);
+  return new THREE.ShaderMaterial({
+    uniforms: u,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    vertexShader: `
+      uniform float uTime;
+      uniform float uScale;
+      attribute float aSize;
+      attribute float aRand;
+      attribute vec3 aColor;
+      varying vec3 vColor;
+      varying float vAlpha;
+      void main() {
+        vec3 p = position;
+        float r = length(p.xz);
+        // Quay vi sai: lõi quay nhanh hơn rìa
+        float ang = atan(p.z, p.x) + uTime * 0.9 / (r * 0.18 + 1.0);
+        p.x = cos(ang) * r;
+        p.z = sin(ang) * r;
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_Position = projectionMatrix * mv;
+        gl_PointSize = aSize * uScale / -mv.z;
+        vColor = aColor;
+        vAlpha = 0.55 + 0.45 * sin(uTime * 2.5 + aRand * 40.0);
+      }`,
+    fragmentShader: `
+      uniform sampler2D uTex;
+      varying vec3 vColor;
+      varying float vAlpha;
+      void main() {
+        vec4 t = texture2D(uTex, vec2(gl_PointCoord.x, 1.0 - gl_PointCoord.y));
+        gl_FragColor = vec4(vColor, vAlpha) * t;
+      }`
+  });
+}
+
+function buildGalaxy(count, tex, minSize, maxSize) {
+  const ARMS = 5, R = 26, INNER = 4.5;
+  const pos = new Float32Array(count * 3);
+  const col = new Float32Array(count * 3);
+  const size = new Float32Array(count);
+  const rand = new Float32Array(count);
+  const inner = new THREE.Color(0xff3d8f), mid = new THREE.Color(0xff9ad1),
+        outer = new THREE.Color(0x8f6bff), gold = new THREE.Color(0xffd59e), c = new THREE.Color();
+  for (let i = 0; i < count; i++) {
+    const k = Math.pow(Math.random(), 1.4);
+    const r = INNER + k * R;
+    const arm = ((i % ARMS) / ARMS) * Math.PI * 2;
+    const spin = r * 0.32;
+    const spread = 0.35 + k * 1.6;
+    const off = () => Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * spread;
+    pos[i * 3] = Math.cos(arm + spin) * r + off();
+    pos[i * 3 + 1] = off() * 0.45 - 1.5;
+    pos[i * 3 + 2] = Math.sin(arm + spin) * r + off();
+    if (Math.random() < 0.06) c.copy(gold);
+    else if (k < 0.45) c.copy(inner).lerp(mid, k / 0.45);
+    else c.copy(mid).lerp(outer, (k - 0.45) / 0.55);
+    col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b;
+    size[i] = minSize + Math.random() * (maxSize - minSize);
+    rand[i] = Math.random();
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('aColor', new THREE.BufferAttribute(col, 3));
+  geo.setAttribute('aSize', new THREE.BufferAttribute(size, 1));
+  geo.setAttribute('aRand', new THREE.BufferAttribute(rand, 1));
+  return new THREE.Points(geo, galaxyMaterial(tex));
+}
+
+const galaxy = new THREE.Group();
+galaxy.add(buildGalaxy(isMobile ? 7000 : 16000, dotTex, 0.08, 0.3));   // bụi sao
+galaxy.add(buildGalaxy(isMobile ? 900 : 2200, heartTex, 0.3, 0.75));   // trái tim li ti
+galaxy.rotation.x = 0.18;
+scene.add(galaxy);
+
+// Quầng sáng lõi ngân hà phía sau trái tim lớn
+const coreGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+  map: dotTex, color: 0xff4f9a, transparent: true, opacity: 0.45,
+  depthWrite: false, blending: THREE.AdditiveBlending
+}));
+coreGlow.scale.set(22, 16, 1);
+coreGlow.position.y = 0;
+scene.add(coreGlow);
+
+/* ---------- Trái tim 3D bay lơ lửng ---------- */
+const heartShape = new THREE.Shape();
+heartShape.moveTo(5, 5);
+heartShape.bezierCurveTo(5, 5, 4, 0, 0, 0);
+heartShape.bezierCurveTo(-6, 0, -6, 7, -6, 7);
+heartShape.bezierCurveTo(-6, 11, -3, 15.4, 5, 19);
+heartShape.bezierCurveTo(12, 15.4, 16, 11, 16, 7);
+heartShape.bezierCurveTo(16, 7, 16, 0, 10, 0);
+heartShape.bezierCurveTo(7, 0, 5, 5, 5, 5);
+const heart3DGeo = new THREE.ExtrudeGeometry(heartShape, {
+  depth: 3, bevelEnabled: true, bevelThickness: 2, bevelSize: 1.6, bevelSegments: 5, curveSegments: 24
+});
+heart3DGeo.center();
+heart3DGeo.rotateZ(Math.PI);
+heart3DGeo.scale(0.055, 0.055, 0.055);
+
+const heartMats = [0xff2a6d, 0xff5c9a, 0xff8fc7, 0xe0115f, 0xffb3d6].map(c =>
+  new THREE.MeshStandardMaterial({ color: c, roughness: 0.28, metalness: 0.15, emissive: c, emissiveIntensity: 0.18 })
+);
+
+const floatHearts = [];
+const HEART_COUNT = isMobile ? 70 : 140;
+for (let i = 0; i < HEART_COUNT; i++) {
+  const m = new THREE.Mesh(heart3DGeo, heartMats[i % heartMats.length]);
+  let x, y, z;
+  do {
+    x = (Math.random() - 0.5) * 60;
+    y = (Math.random() - 0.5) * 36;
+    z = (Math.random() - 0.5) * 60;
+  } while (Math.hypot(x, y * 0.8, z) < 9);
+  m.position.set(x, y, z);
+  const s = 0.5 + Math.random() * 1.1;
+  m.scale.setScalar(s);
+  m.rotation.set(Math.random() * 0.6, Math.random() * Math.PI * 2, Math.random() * 0.6);
+  m.userData = { vy: 0.6 + Math.random() * 1.2, rs: (Math.random() - 0.5) * 1.6, ph: Math.random() * 10 };
+  scene.add(m);
+  floatHearts.push(m);
+}
+
+/* ---------- Hoa hồng đỏ ---------- */
+// Cánh hoa: mặt phẳng được uốn cong lòng chảo, mép trên cong ra ngoài
+function makePetalGeo(cup, curl, w, h) {
+  const geo = new THREE.PlaneGeometry(1, 1, 10, 12);
+  geo.translate(0, 0.5, 0);
+  const p = geo.attributes.position;
+  const colors = [];
+  const base = new THREE.Color(0x4a0010), mid = new THREE.Color(0xffffff), tip = new THREE.Color(0xffd0d8), c = new THREE.Color();
+  for (let i = 0; i < p.count; i++) {
+    let x = p.getX(i), y = p.getY(i);
+    const shape = 0.35 + 0.65 * Math.sin(Math.PI * (0.12 + y * 0.78));
+    x *= shape * w;
+    let z = -x * x * cup + Math.pow(y, 3) * curl;
+    p.setXYZ(i, x, y * h, z);
+    // Sẫm ở gốc, sáng dần lên mép
+    if (y < 0.5) c.copy(base).lerp(mid, y / 0.5);
+    else c.copy(mid).lerp(tip, Math.pow((y - 0.5) / 0.5, 3) * 0.35);
+    colors.push(c.r, c.g, c.b);
+  }
+  geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+  geo.computeVertexNormals();
+  return geo;
+}
+
+const ROSE_PETALS = 26;
+const rosePetalGeos = [];
+for (let i = 0; i < ROSE_PETALS; i++) {
+  const t = i / (ROSE_PETALS - 1);
+  rosePetalGeos.push(makePetalGeo(2.4 - t * 1.4, 0.05 + t * 0.55, 1, 1));
+}
+const sepalGeo = makePetalGeo(0.6, 0.4, 0.45, 0.9);
+const leafGeo = makePetalGeo(0.5, -0.15, 0.8, 1.3);
+const stemGeo = new THREE.CylinderGeometry(0.045, 0.06, 3, 8);
+stemGeo.translate(0, -1.5, 0);
+const greenMat = new THREE.MeshStandardMaterial({ color: 0x2f7d3e, roughness: 0.6, side: THREE.DoubleSide });
+const greenVCMat = new THREE.MeshStandardMaterial({ color: 0x3a9a4c, vertexColors: true, roughness: 0.6, side: THREE.DoubleSide });
+
+function makeRose(color) {
+  const g = new THREE.Group();
+  const mat = new THREE.MeshStandardMaterial({
+    color, vertexColors: true, roughness: 0.42, side: THREE.DoubleSide,
+    emissive: color, emissiveIntensity: 0.12
+  });
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < ROSE_PETALS; i++) {
+    const t = i / (ROSE_PETALS - 1);
+    const pivot = new THREE.Group();
+    pivot.rotation.y = i * golden;
+    const petal = new THREE.Mesh(rosePetalGeos[i], mat);
+    const s = 0.32 + t * 0.85;
+    petal.scale.set(s * (0.8 + t * 0.4), s, s);
+    petal.position.set(0, -t * 0.35, 0.04 + t * 0.32);
+    petal.rotation.x = 0.04 + Math.pow(t, 1.6) * 1.15; // cánh ngoài xòe rộng hơn
+    pivot.add(petal);
+    g.add(pivot);
+  }
+  // Đài hoa
+  for (let i = 0; i < 5; i++) {
+    const pivot = new THREE.Group();
+    pivot.rotation.y = (i / 5) * Math.PI * 2 + 0.3;
+    const s = new THREE.Mesh(sepalGeo, greenVCMat);
+    s.position.set(0, -0.3, 0.15);
+    s.rotation.x = Math.PI - 0.9;
+    pivot.add(s);
+    g.add(pivot);
+  }
+  // Cành và lá
+  const stem = new THREE.Mesh(stemGeo, greenMat);
+  stem.position.y = -0.3;
+  g.add(stem);
+  for (let i = 0; i < 2; i++) {
+    const pivot = new THREE.Group();
+    pivot.position.y = -1.4 - i * 0.7;
+    pivot.rotation.y = i * Math.PI + 0.4;
+    const leaf = new THREE.Mesh(leafGeo, greenVCMat);
+    leaf.scale.setScalar(0.55);
+    leaf.rotation.x = 1.0;
+    pivot.add(leaf);
+    g.add(pivot);
+  }
+  return g;
+}
+
+const flowers = [];
+const roseColors = [0xd1102f, 0xe8213f, 0xb00c26, 0xff2d4d];
+const FLOWER_COUNT = isMobile ? 16 : 28;
+for (let i = 0; i < FLOWER_COUNT; i++) {
+  const f = makeRose(roseColors[i % roseColors.length]);
+  const a = (i / FLOWER_COUNT) * Math.PI * 2 + Math.random() * 0.3;
+  const r = 13 + Math.random() * 11;
+  f.position.set(Math.cos(a) * r, (Math.random() - 0.5) * 16, Math.sin(a) * r);
+  f.scale.setScalar(0.9 + Math.random() * 0.7);
+  f.rotation.set((Math.random() - 0.5) * 0.9, Math.random() * Math.PI, (Math.random() - 0.5) * 0.9);
+  f.userData = { baseY: f.position.y, ph: Math.random() * 10, rs: 0.15 + Math.random() * 0.3 };
+  scene.add(f);
+  flowers.push(f);
+}
+
+/* ---------- Cánh hoa rơi ---------- */
+const petalShape = new THREE.Shape();
+petalShape.moveTo(0, 0);
+petalShape.bezierCurveTo(0.35, 0.2, 0.35, 0.65, 0, 0.9);
+petalShape.bezierCurveTo(-0.35, 0.65, -0.35, 0.2, 0, 0);
+const petalGeoFall = new THREE.ShapeGeometry(petalShape, 8);
+petalGeoFall.center();
+const petalMats = [0xd1102f, 0xff3355, 0xff8fa8].map(c =>
+  new THREE.MeshStandardMaterial({ color: c, side: THREE.DoubleSide, roughness: 0.6, emissive: c, emissiveIntensity: 0.25, transparent: true, opacity: 0.9 })
+);
+const petals = [];
+const PETAL_COUNT = isMobile ? 90 : 180;
+for (let i = 0; i < PETAL_COUNT; i++) {
+  const p = new THREE.Mesh(petalGeoFall, petalMats[i % petalMats.length]);
+  p.position.set((Math.random() - 0.5) * 50, Math.random() * 40 - 20, (Math.random() - 0.5) * 50);
+  p.scale.setScalar(0.5 + Math.random() * 0.6);
+  p.userData = {
+    vy: 1 + Math.random() * 1.5, sway: Math.random() * 10,
+    rx: (Math.random() - 0.5) * 3, ry: (Math.random() - 0.5) * 3, rz: (Math.random() - 0.5) * 3
+  };
+  scene.add(p);
+  petals.push(p);
+}
+
+/* ---------- Ảnh kỷ niệm (khung polaroid bay quanh trái tim) ---------- */
+// Ảnh hiển thị bằng thẻ <img> bám theo vị trí 3D, nên chạy được cả khi mở file trực tiếp (file://)
+// DANH SÁCH ẢNH GẮN SẴN – chép ảnh vào thư mục "photos" rồi ghi đúng tên file vào đây (tối đa 12 ảnh)
+const PHOTOS = [
+  'photos/1.jpg',
+  'photos/2.jpg',
+];
+const MAX_PHOTOS = 12;
+const PHOTO_RADIUS = 10;
+
+const photoLayer = document.getElementById('photoLayer');
+const lightbox = document.getElementById('lightbox');
+lightbox.addEventListener('click', () => lightbox.classList.remove('show'));
+
+const photoGroup = new THREE.Group();
+photoGroup.rotation.x = 0.18;
+scene.add(photoGroup);
+const photoFrames = [];
+const projVec = new THREE.Vector3();
+let photoSpin = 0;
+
+function layoutPhotos() {
+  photoFrames.forEach((f, i) => { f.userData.base = (i / photoFrames.length) * Math.PI * 2; });
+}
+
+function addPhoto(url) {
+  const img = new Image();
+  img.onload = () => {
+    if (photoFrames.length >= MAX_PHOTOS) return;
+    img.alt = 'Ảnh kỷ niệm';
+    img.draggable = false;
+    const el = document.createElement('div');
+    el.className = 'polaroid';
+    el.appendChild(img);
+    el.addEventListener('click', () => {
+      lightbox.querySelector('img').src = url;
+      lightbox.classList.add('show');
+    });
+    photoLayer.appendChild(el);
+    const holder = new THREE.Object3D();
+    holder.userData = { el, ph: Math.random() * 10, tilt: (Math.random() - 0.5) * 12 };
+    photoGroup.add(holder);
+    photoFrames.push(holder);
+    layoutPhotos();
+  };
+  img.src = url;
+}
+PHOTOS.forEach(addPhoto);
+
+/* ---------- Bùng tim khi chạm ---------- */
+const bursts = [];
+function burstAt(clientX, clientY) {
+  const ndc = new THREE.Vector2((clientX / window.innerWidth) * 2 - 1, -(clientY / window.innerHeight) * 2 + 1);
+  const ray = new THREE.Raycaster();
+  ray.setFromCamera(ndc, camera);
+  const origin = ray.ray.origin.clone().add(ray.ray.direction.clone().multiplyScalar(12));
+  for (let i = 0; i < 14; i++) {
+    const mat = heartMats[i % heartMats.length].clone();
+    mat.transparent = true;
+    const m = new THREE.Mesh(heart3DGeo, mat);
+    m.position.copy(origin);
+    m.scale.setScalar(0.35 + Math.random() * 0.35);
+    m.lookAt(camera.position);
+    const dir = new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.2, Math.random() - 0.5).normalize();
+    m.userData = { v: dir.multiplyScalar(4 + Math.random() * 4), life: 0 };
+    scene.add(m);
+    bursts.push(m);
+  }
+  // Tim emoji nhỏ trên màn hình
+  for (let i = 0; i < 5; i++) {
+    const el = document.createElement('div');
+    el.className = 'pop-heart';
+    el.textContent = ['💖', '💗', '🌸', '💕', '🌹'][i];
+    el.style.left = clientX + 'px';
+    el.style.top = clientY + 'px';
+    el.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
+    el.style.animationDelay = (i * 0.06) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1700);
+  }
+}
+
+let downPos = null;
+canvas.addEventListener('pointerdown', e => { downPos = { x: e.clientX, y: e.clientY }; });
+canvas.addEventListener('pointerup', e => {
+  if (downPos && Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y) < 6 && document.body.classList.contains('started')) {
+    burstAt(e.clientX, e.clientY);
+  }
+  downPos = null;
+});
+
+/* ---------- Vòng lặp hoạt ảnh ---------- */
+const clock = new THREE.Clock();
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const t = clock.elapsedTime;
+
+  // Nhịp tim đập
+  const beat = 1 + 0.06 * Math.pow(Math.max(0, Math.sin(t * 2.6)), 6) + 0.03 * Math.pow(Math.max(0, Math.sin(t * 2.6 - 0.9)), 6);
+  bigHeart.scale.setScalar(beat);
+  bigHeart.rotation.y = Math.sin(t * 0.4) * 0.35;
+  pinkLight.intensity = 1.8 + (beat - 1) * 12;
+
+  stars.rotation.y += dt * 0.01;
+  for (const u of galaxyUniforms) u.uTime.value = t * 0.25;
+  coreGlow.material.opacity = 0.35 + (beat - 1) * 2.5;
+
+  for (const h of floatHearts) {
+    const u = h.userData;
+    h.position.y += u.vy * dt;
+    h.position.x += Math.sin(t * 0.5 + u.ph) * dt * 0.3;
+    h.rotation.y += u.rs * dt;
+    if (h.position.y > 20) h.position.y = -20;
+  }
+
+  for (const f of flowers) {
+    const u = f.userData;
+    f.position.y = u.baseY + Math.sin(t * 0.6 + u.ph) * 0.8;
+    f.rotation.y += u.rs * dt;
+  }
+
+  photoSpin += dt * 0.12;
+  const camDist = camera.position.length();
+  for (const f of photoFrames) {
+    const u = f.userData, a = u.base + photoSpin, el = u.el;
+    f.position.set(Math.cos(a) * PHOTO_RADIUS, 1 + Math.sin(t * 0.8 + u.ph) * 0.6, Math.sin(a) * PHOTO_RADIUS);
+    f.getWorldPosition(projVec);
+    const dist = projVec.distanceTo(camera.position);
+    projVec.project(camera);
+    if (projVec.z > 1) { el.style.display = 'none'; continue; }
+    el.style.display = '';
+    const x = (projVec.x * 0.5 + 0.5) * window.innerWidth;
+    const y = (-projVec.y * 0.5 + 0.5) * window.innerHeight;
+    const s = 24 / dist;
+    const depth = dist - camDist; // âm = phía trước trái tim, dương = phía sau
+    el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) scale(${s}) rotate(${u.tilt + Math.sin(t * 0.7 + u.ph) * 3}deg)`;
+    el.style.zIndex = Math.round(1000 - dist * 10);
+    el.style.opacity = 1 - Math.min(0.6, Math.max(0, (depth + 2) / 12));
+  }
+
+  for (const p of petals) {
+    const u = p.userData;
+    p.position.y -= u.vy * dt;
+    p.position.x += Math.sin(t * 0.8 + u.sway) * dt * 0.8;
+    p.rotation.x += u.rx * dt;
+    p.rotation.y += u.ry * dt;
+    p.rotation.z += u.rz * dt;
+    if (p.position.y < -20) p.position.y = 20;
+  }
+
+  for (let i = bursts.length - 1; i >= 0; i--) {
+    const b = bursts[i], u = b.userData;
+    u.life += dt;
+    b.position.addScaledVector(u.v, dt);
+    u.v.multiplyScalar(0.96);
+    u.v.y += dt * 2;
+    b.rotation.z += dt * 2;
+    b.material.opacity = Math.max(0, 1 - u.life / 1.8);
+    if (u.life > 1.8) {
+      scene.remove(b);
+      b.material.dispose();
+      bursts.splice(i, 1);
+    }
+  }
+
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  for (const u of galaxyUniforms) u.uScale.value = window.innerHeight * renderer.getPixelRatio() * 0.866;
+});
+
+/* =========================================================
+   LỜI CHÚC – HIỆU ỨNG GÕ CHỮ
+   ========================================================= */
+const wishEl = document.getElementById('wish');
+const dotsEl = document.getElementById('dots');
+let wishIndex = 0, typeTimer = null, nextTimer = null;
+
+WISHES.forEach((_, i) => {
+  const b = document.createElement('button');
+  b.setAttribute('aria-label', 'Lời chúc ' + (i + 1));
+  b.addEventListener('click', () => showWish(i));
+  dotsEl.appendChild(b);
+});
+
+function showWish(i) {
+  clearTimeout(typeTimer);
+  clearTimeout(nextTimer);
+  wishIndex = i;
+  [...dotsEl.children].forEach((d, k) => d.classList.toggle('active', k === i));
+  const chars = Array.from(WISHES[i]);
+  let n = 0;
+  (function step() {
+    wishEl.innerHTML = '';
+    wishEl.textContent = chars.slice(0, n).join('');
+    const caret = document.createElement('span');
+    caret.className = 'caret';
+    wishEl.appendChild(caret);
+    if (n < chars.length) {
+      n++;
+      typeTimer = setTimeout(step, 48);
+    } else {
+      nextTimer = setTimeout(() => showWish((wishIndex + 1) % WISHES.length), 7000);
+    }
+  })();
+}
+
+/* =========================================================
+   ÂM NHẠC
+   - Ưu tiên file music.mp3 (nếu có)
+   - Nếu không có: tự tổng hợp giai điệu hộp nhạc bằng Web Audio
+   ========================================================= */
+const audioEl = document.getElementById('bgm');
+const musicBtn = document.getElementById('musicBtn');
+let musicMode = null; // 'file' | 'synth'
+let musicOn = false;
+let actx = null, master = null, schedTimer = null, nextNoteTime = 0, stepIdx = 0;
+
+const BPM = 84, EIGHTH = 60 / BPM / 2;
+const ARPS = [
+  [48, 55, 60, 64, 67, 64, 60, 55], // C
+  [43, 50, 55, 59, 62, 59, 55, 50], // G
+  [45, 52, 57, 60, 64, 60, 57, 52], // Am
+  [41, 48, 53, 57, 60, 57, 53, 48]  // F
+];
+const MELODY = [
+  [76, 74, 72, 74], [74, 71, 67, 0], [72, 74, 76, 79], [77, 76, 72, 0],
+  [76, 79, 81, 79], [79, 77, 74, 71], [72, 76, 74, 72], [69, 72, 72, 0]
+];
+const midiHz = m => 440 * Math.pow(2, (m - 69) / 12);
+
+function initSynth() {
+  if (actx) return;
+  actx = new (window.AudioContext || window.webkitAudioContext)();
+  master = actx.createGain();
+  master.gain.value = 0.32;
+  // Tiếng vọng nhẹ
+  const delay = actx.createDelay();
+  delay.delayTime.value = EIGHTH * 3;
+  const fb = actx.createGain(); fb.gain.value = 0.32;
+  const lp = actx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 2400;
+  master.connect(actx.destination);
+  master.connect(delay);
+  delay.connect(lp); lp.connect(fb); fb.connect(delay);
+  lp.connect(actx.destination);
+}
+
+function playNote(midi, time, dur, vol) {
+  const o1 = actx.createOscillator(), o2 = actx.createOscillator(), g = actx.createGain();
+  o1.type = 'sine'; o2.type = 'triangle';
+  o1.frequency.value = midiHz(midi);
+  o2.frequency.value = midiHz(midi) * 2;
+  const g2 = actx.createGain(); g2.gain.value = 0.18;
+  o1.connect(g); o2.connect(g2); g2.connect(g); g.connect(master);
+  g.gain.setValueAtTime(0.0001, time);
+  g.gain.exponentialRampToValueAtTime(vol, time + 0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001, time + dur);
+  o1.start(time); o2.start(time);
+  o1.stop(time + dur + 0.05); o2.stop(time + dur + 0.05);
+}
+
+function scheduler() {
+  while (nextNoteTime < actx.currentTime + 0.25) {
+    const bar = Math.floor(stepIdx / 8) % 8;
+    const inBar = stepIdx % 8;
+    playNote(ARPS[bar % 4][inBar], nextNoteTime, 1.3, 0.09);
+    if (inBar % 2 === 0) {
+      const m = MELODY[bar][inBar / 2];
+      if (m) playNote(m, nextNoteTime, 2, 0.2);
+    }
+    nextNoteTime += EIGHTH;
+    stepIdx = (stepIdx + 1) % 64;
+  }
+}
+
+function startSynth() {
+  musicMode = 'synth';
+  actx.resume();
+  nextNoteTime = actx.currentTime + 0.1;
+  clearInterval(schedTimer);
+  schedTimer = setInterval(scheduler, 50);
+}
+
+function startMusic() {
+  initSynth(); // tạo AudioContext ngay trong thao tác chạm của người dùng
+  audioEl.volume = 0.7;
+  audioEl.play()
+    .then(() => { musicMode = 'file'; })
+    .catch(() => startSynth());
+  musicOn = true;
+  musicBtn.classList.add('playing');
+}
+
+function toggleMusic() {
+  musicOn = !musicOn;
+  musicBtn.classList.toggle('playing', musicOn);
+  if (musicMode === 'file') {
+    musicOn ? audioEl.play() : audioEl.pause();
+  } else if (musicMode === 'synth') {
+    if (musicOn) { actx.resume(); nextNoteTime = actx.currentTime + 0.1; schedTimer = setInterval(scheduler, 50); }
+    else { clearInterval(schedTimer); actx.suspend(); }
+  }
+}
+musicBtn.addEventListener('click', toggleMusic);
+
+/* =========================================================
+   MỞ QUÀ
+   ========================================================= */
+document.getElementById('openBtn').addEventListener('click', () => {
+  document.getElementById('intro').classList.add('hide');
+  document.body.classList.add('started');
+  startMusic();
+  setTimeout(() => showWish(0), 1600);
+  setTimeout(() => burstAt(window.innerWidth / 2, window.innerHeight * 0.45), 900);
+});
+</script>
+</body>
+</html>
